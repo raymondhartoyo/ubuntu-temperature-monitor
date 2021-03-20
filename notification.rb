@@ -2,12 +2,11 @@ require 'open3'
 
 NOTIFY_COMMAND = 'notify-send'
 NOTIFY_HINTS = 'int:transient:1'
-NOTIFY_TIMEOUT = '4000'
 
 NOTIFICATION_TITLE = 'TEMPERATURE ALERT'
 
 def notify(title, body)
-  stdout_and_stderr, status = Open3.capture2e(NOTIFY_COMMAND, '--hint', NOTIFY_HINTS, '-t', NOTIFY_TIMEOUT, title.to_s, body.to_s)
+  stdout_and_stderr, status = Open3.capture2e(NOTIFY_COMMAND, '--hint', NOTIFY_HINTS, title.to_s, body.to_s)
   raise "Cannot send desktop notification, output: #{stdout_and_stderr}" if status.exitstatus != 0
 end
 
