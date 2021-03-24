@@ -12,6 +12,6 @@ end
 
 def notify_temps_not_safe(not_safe_temperatures)
   body = "Not safe: "
-  body += not_safe_temperatures.each { _1.to_s }.join(',')
+  body += not_safe_temperatures.each { |temp| temp.to_s }.join(',')
   notify(NOTIFICATION_TITLE, body)
 end
