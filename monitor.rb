@@ -40,13 +40,17 @@ def temperatures
 end
 
 def check
-  not_safe_temperatures = temperatures.select do |temp_data|
-    temp_data.value >= SAFE_TEMPERATURE
-  end
+  all_temperatures = temperatures
+
+  not_safe_temperatures = all_temperatures.select { |temp| temp.value >= SAFE_TEMPERATURE }
+  max_temperature = all_temperatures.sort_by { |temp| -temp.value }.first
+
+  puts "#{Time.now.to_s}:\n"\
+       " - not safe: #{not_safe_temperatures.size}\n"\
+       " - max: #{max_temperature.source}=#{max_temperature.value}\n"\
+       "\n"
 
   notify_temps_not_safe(not_safe_temperatures) if not_safe_temperatures.size > 0
-
-  puts "#{Time.now.to_s} - not safe: #{not_safe_temperatures.size}"
 end
 
 while true
