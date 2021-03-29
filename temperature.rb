@@ -1,4 +1,6 @@
 class Temperature
+  SAFE_TEMPERATURE = 80
+  
   def initialize(source, value)
     @source = source
     @value = value
@@ -14,5 +16,9 @@ class Temperature
 
   def to_s
     "#{source}-#{value}"
+  end
+
+  def unsafe?
+    value >= SAFE_TEMPERATURE
   end
 end

@@ -4,7 +4,6 @@ require './notification'
 
 TEMPERATURE_VALUES_COMMAND = 'cat /sys/class/thermal/thermal_zone*/temp'
 TEMPERATURE_NAMES_COMMAND = 'cat /sys/class/thermal/thermal_zone*/type'
-SAFE_TEMPERATURE = 80
 
 def fetch_temperature_values
   stdout_and_stderr, status = Open3.capture2e(TEMPERATURE_VALUES_COMMAND)
@@ -39,17 +38,20 @@ def temperatures
   data
 end
 
+def log(temperatures)
+  temperatures_serialized = temperatures.each { |temp| temp.to_s }
+                                        .join("\n")
+
+  puts "#{Time.now.to_s}: \n"\
+       "#{temperatures_serialized}\n\n"
+end
+
 def check
-  all_temperatures = temperatures
+  all_temperatures = temperatures.sort_by { |temp| -temp.value }
 
-  not_safe_temperatures = all_temperatures.select { |temp| temp.value >= SAFE_TEMPERATURE }
-  max_temperature = all_temperatures.sort_by { |temp| -temp.value }.first
+  log(all_temperatures)
 
-  puts "#{Time.now.to_s}:\n"\
-       " - not safe: #{not_safe_temperatures.size}\n"\
-       " - max: #{max_temperature.source}=#{max_temperature.value}\n"\
-       "\n"
-
+  not_safe_temperatures = all_temperatures.select { |temp| temp.unsafe? }
   notify_temps_not_safe(not_safe_temperatures) if not_safe_temperatures.size > 0
 end
 
