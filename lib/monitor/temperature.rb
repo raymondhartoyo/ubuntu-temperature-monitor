@@ -1,6 +1,6 @@
 class Temperature
   SAFE_TEMPERATURE = 80
-  
+
   def initialize(source, value)
     @source = source
     @value = value

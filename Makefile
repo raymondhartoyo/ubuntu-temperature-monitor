@@ -1,2 +1,0 @@
-run:
-	ruby monitor.rb

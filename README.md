@@ -8,11 +8,5 @@ Checking machine temperature sensors every X seconds and send desktop notificati
 
 # Run
 ```
-make
-```
-
-or
-
-```
-make run
+bin/monitor
 ```
